@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query4Jobs - Análisis de Empleos en Estadística</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔍 Query4Jobs</h1>
+            <p>Análisis de Empleos en Estadística y Ciencia de Datos</p>
+        </header>
+
+        <div class="search-section">
+            <div class="search-form">
+                <h2>Buscar Estadísticas de Empleo</h2>
+                <form id="jobSearchForm">
+                    <div class="form-group">
+                        <label for="jobPosition">Puesto de Trabajo:</label>
+                        <select id="jobPosition" required>
+                            <option value="">Selecciona un puesto...</option>
+                            <option value="Analista de datos">Analista de datos</option>
+                            <option value="Científico de datos">Científico de datos</option>
+                            <option value="Ingeniero estadístico">Ingeniero estadístico</option>
+                            <option value="Especialista en inteligencia de negocios">Especialista en inteligencia de negocios</option>
+                            <option value="Analista de riesgos">Analista de riesgos</option>
+                            <option value="Especialista en bioestadística">Especialista en bioestadística</option>
+                            <option value="Ingeniero de machine learning">Ingeniero de machine learning</option>
+                            <option value="Analista actuarial">Analista actuarial</option>
+                            <option value="Especialista en analítica predictiva">Especialista en analítica predictiva</option>
+                            <option value="Ingeniero en calidad estadística">Ingeniero en calidad estadística</option>
+                            <option value="Consultor estadístico">Consultor estadístico</option>
+                            <option value="Data engineer">Data engineer</option>
+                            <option value="Especialista en visualización de datos">Especialista en visualización de datos</option>
+                            <option value="Analista de investigación de mercado">Analista de investigación de mercado</option>
+                            <option value="Especialista en estadística computacional">Especialista en estadística computacional</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">País:</label>
+                        <select id="country" required>
+                            <option value="">Selecciona un país...</option>
+                            <option value="EEUU">Estados Unidos</option>
+                            <option value="España">España</option>
+                            <option value="México">México</option>
+                            <option value="Alemania">Alemania</option>
+                            <option value="Francia">Francia</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="search-btn">🔍 Analizar Empleos</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="loadingSection" class="loading-section" style="display: none;">
+            <div class="loading-spinner"></div>
+
+<!-- Sección de carga -->
+            <p>Recopilando datos de empleos...</p>
+        </div>
+
+        <div id="resultsSection" class="results-section" style="display: none;">
+            <div class="results-header">
+                <h2 id="resultsTitle">Resultados del Análisis</h2>
+                <div class="results-summary">
+                    <div class="summary-card">
+                        <h3 id="totalJobs">0</h3>
+<!-- Visualización de estadísticas -->
+                        <p>Empleos Encontrados</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="avgSalary">$0</h3>
+                        <p>Salario Promedio</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="topTech">-</h3>
+                        <p>Tecnología Principal</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-section">
+                    <h3>📊 Distribución Salarial</h3>
+                    <canvas id="salaryChart"></canvas>
+                </div>
+
+                <div class="chart-section">
+                    <h3>💻 Tecnologías Más Demandadas</h3>
+                    <canvas id="techChart"></canvas>
+                </div>
+
+                <div class="chart-section">
+                    <h3>📈 Experiencia Requerida</h3>
+                    <canvas id="experienceChart"></canvas>
+                </div>
+
+                <div class="chart-section">
+                    <h3>🏢 Distribución por Fuente</h3>
+                    <canvas id="sourceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="jobs-list">
+                <h3>📋 Muestra de Empleos Encontrados</h3>
+                <div id="jobsList" class="jobs-container">
+                    <!-- Los empleos se cargarán aquí dinámicamente -->
+                </div>
+            </div>
+        </div>
+        
+        <div id="errorSection" class="error-section" style="display: none;">
+            <div class="error-message">
+                <h3>⚠️ Error en la Búsqueda</h3>
+
+                <p id="errorText">No se pudieron obtener datos para la búsqueda solicitada.</p>
+                <button onclick="hideError()" class="retry-btn">Intentar de Nuevo</button>
+            </div>
+        </div>
+
+        <!-- Nueva sección para cursos de Coursera -->
+        <div class="coursera-section">
+            <h2>📚 Cursos Populares en Coursera</h2>
+            <p>Explora los cursos más relevantes en Python, SQL y R para potenciar tu carrera.</p>
+            <div class="course-categories">
+                <div class="course-category">
+                    <h3>Python Cursos</h3>
+                    <div id="pythonCourses" class="courses-container">
+                        <!-- Cursos de Python se cargarán aquí -->
+                        <p>Cargando cursos de Python...</p>
+                    </div>
+                </div>
+                <div class="course-category">
+                    <h3>SQL Cursos</h3>
+                    <div id="sqlCourses" class="courses-container">
+                        <!-- Cursos de SQL se cargarán aquí -->
+                        <p>Cargando cursos de SQL...</p>
+                    </div>
+                </div>
+                <div class="course-category">
+                    <h3>R Cursos</h3>
+                    <div id="rCourses" class="courses-container">
+                        <!-- Cursos de R se cargarán aquí -->
+                        <p>Cargando cursos de R...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Créditos de fuentes -->
+    <footer class="footer">
+        <p>&copy; 2025 Query4Jobs - Análisis de Empleos en Estadística</p>
+        <p>Datos obtenidos de Adzuna, Jooble y SerpAPI (Coursera)</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
